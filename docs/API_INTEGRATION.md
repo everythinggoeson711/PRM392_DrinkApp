@@ -40,19 +40,19 @@
 ## Product image upload (local VPS storage)
 
 - Uploaded files are stored in server folder:
-   - `uploads/products`
+  - `uploads/products`
 - Static file URL is exposed by backend:
-   - `/uploads/*`
+  - `/uploads/*`
 - Endpoints:
-   - `POST /products/upload-image` (admin, multipart field: `image`)
-   - `PATCH /products/:id/image` (admin, multipart field: `image`)
+  - `POST /products/upload-image` (admin, multipart field: `image`)
+  - `PATCH /products/:id/image` (admin, multipart field: `image`)
 - Allowed types:
-   - jpg, jpeg, png, webp
+  - jpg, jpeg, png, webp
 - Max file size:
-   - 5MB
+  - 5MB
 - Old local image cleanup:
-   - On `PATCH /products/:id/image`, previous local image is removed automatically.
-   - On `DELETE /products/:id`, local image file is removed automatically.
+  - On `PATCH /products/:id/image`, previous local image is removed automatically.
+  - On `DELETE /products/:id`, local image file is removed automatically.
 
 ## Notes
 
@@ -63,13 +63,13 @@
 ## Docker seed flow
 
 - Docker Postgres auto-runs SQL files in `database/` on first init (empty volume):
-   - `schema.sql`
-   - `seed.sql`
-   - `verify.sql`
+  - `schema.sql`
+  - `seed.sql`
+  - `verify.sql`
 - You can reseed and verify anytime (without reset volume):
-   - `npm run seed:docker:all`
+  - `npm run seed:docker:all`
 - To force rerun Docker init scripts (clean DB):
-   - `npm run docker:db:reset`
+  - `npm run docker:db:reset`
 - For existing DB without wiping volume, run:
-   - `npm run seed:all`
-   - If host DB credential is different, prefer Docker command above.
+  - `npm run seed:all`
+  - If host DB credential is different, prefer Docker command above.

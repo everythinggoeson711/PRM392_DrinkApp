@@ -137,7 +137,7 @@ Tai lieu nay giai thich ngan gon nhung gi da lam de ban de theo doi.
     - `PATCH /orders/:id/status`
   - Nghiep vu:
     - Tao order trong transaction.
-    - Tinh `totalAmount` phia server theo quantity * gia san pham.
+    - Tinh `totalAmount` phia server theo quantity \* gia san pham.
     - Luu `order_items` kem tuy chon size/sugar/ice/toppings.
     - Rule status:
       - `PENDING -> PROCESSING/CANCELLED`
@@ -285,6 +285,7 @@ Tai lieu nay giai thich ngan gon nhung gi da lam de ban de theo doi.
 ```
 
 ### Cau hinh SePay tren sepay.vn:
+
 1. Dang ky tai https://sepay.vn
 2. Cau hinh -> Webhook URL: https://your-vps/payments/webhook/sepay
 3. Lay API Key va dien vao SEPAY_API_KEY
