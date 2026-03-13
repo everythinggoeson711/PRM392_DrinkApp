@@ -3,6 +3,7 @@
 -- ============================================================
 
 -- Drop tables in reverse dependency order
+DROP TABLE IF EXISTS payments CASCADE;
 DROP TABLE IF EXISTS order_items CASCADE;
 DROP TABLE IF EXISTS orders CASCADE;
 DROP TABLE IF EXISTS products CASCADE;
@@ -73,8 +74,26 @@ CREATE TABLE order_items (
 );
 
 -- ============================================================
+-- PAYMENTS (SePay)
+-- ============================================================
+CREATE TABLE payments (
+    id                      SERIAL PRIMARY KEY,
+    order_id                INTEGER             NOT NULL UNIQUE REFERENCES orders(id) ON DELETE CASCADE,
+    payment_code            VARCHAR(50)         NOT NULL UNIQUE,   -- transfer content, e.g. DRK1
+    amount                  NUMERIC(10, 2)      NOT NULL,
+    status                  VARCHAR(20)         NOT NULL DEFAULT 'PENDING'
+                                CHECK (status IN ('PENDING', 'PAID', 'FAILED', 'EXPIRED')),
+    qr_url                  TEXT,
+    sepay_transaction_id    VARCHAR(100),
+    paid_at                 TIMESTAMP,
+    created_at              TIMESTAMP           NOT NULL DEFAULT NOW()
+);
+
+-- ============================================================
 -- INDEXES
 -- ============================================================
-CREATE INDEX idx_products_category ON products(category_id);
-CREATE INDEX idx_orders_user       ON orders(user_id);
-CREATE INDEX idx_order_items_order ON order_items(order_id);
+CREATE INDEX idx_products_category  ON products(category_id);
+CREATE INDEX idx_orders_user        ON orders(user_id);
+CREATE INDEX idx_order_items_order  ON order_items(order_id);
+CREATE INDEX idx_payments_order     ON payments(order_id);
+CREATE INDEX idx_payments_code      ON payments(payment_code);

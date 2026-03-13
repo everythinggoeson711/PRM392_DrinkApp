@@ -1,0 +1,141 @@
+{
+  "info": {
+    "name": "PRM392 DrinkApp Backend",
+    "_postman_id": "7f466745-714d-4de2-9fcf-3e9e6e6b44f2",
+    "description": "Collection for testing DrinkApp backend APIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "accessToken", "value": "" },
+    { "key": "adminToken", "value": "" },
+    { "key": "categoryId", "value": "1" },
+    { "key": "productId", "value": "1" },
+    { "key": "orderId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Customer One\",\n  \"email\": \"customer1@example.com\",\n  \"password\": \"secret123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer1@example.com\",\n  \"password\": \"secret123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/profile", "host": ["{{baseUrl}}"], "path": ["auth", "profile"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Create Category (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/categories", "host": ["{{baseUrl}}"], "path": ["categories"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Milk Tea\",\n  \"description\": \"Best selling milk tea\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Categories",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/categories", "host": ["{{baseUrl}}"], "path": ["categories"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Create Product (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/products", "host": ["{{baseUrl}}"], "path": ["products"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Brown Sugar Milk Tea\",\n  \"price\": 45000,\n  \"imageUrl\": \"https://example.com/brown-sugar.png\",\n  \"categoryId\": {{categoryId}}\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Products",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/products?q=milk", "host": ["{{baseUrl}}"], "path": ["products"], "query": [{ "key": "q", "value": "milk" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/orders", "host": ["{{baseUrl}}"], "path": ["orders"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Bao\",\n  \"phone\": \"0901234567\",\n  \"address\": \"Ho Chi Minh City\",\n  \"items\": [\n    {\n      \"productId\": {{productId}},\n      \"quantity\": 2,\n      \"size\": \"L\",\n      \"sugarLevel\": \"70%\",\n      \"iceLevel\": \"50%\",\n      \"toppings\": [\"pearl\"]\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Order Status (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/orders/{{orderId}}/status", "host": ["{{baseUrl}}"], "path": ["orders", "{{orderId}}", "status"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PROCESSING\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
