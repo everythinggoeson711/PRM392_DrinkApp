@@ -6,6 +6,7 @@ import { LoginDto } from './dto/login.dto';
 import { User } from '../users/entities/user.entity';
 import { JwtUserPayload } from './decorators/current-user.decorator';
 import * as bcrypt from 'bcrypt';
+import { AuthResponseDto } from './dto/auth-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -14,19 +15,30 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private sanitizeUser(user: User): Omit<User, 'password'> {
-    const { password: _pw, ...rest } = user;
-    return rest as Omit<User, 'password'>;
+  private async buildPayload(user: User): Promise<AuthResponseDto> {
+    const payload: JwtUserPayload = {
+      sub: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    };
+    const access_token = await this.jwtService.signAsync(payload);
+    return {
+      access_token,
+      tokenType: 'Bearer',
+      expiresIn: 86400,
+    };
   }
 
-  async register(registerDto: RegisterDto): Promise<Omit<User, 'password'>> {
-    return this.usersService.create({ ...registerDto, role: 'customer' });
+  async register(registerDto: RegisterDto): Promise<AuthResponseDto> {
+    const user = await this.usersService.create({
+      ...registerDto,
+      role: 'customer',
+    });
+    return this.buildPayload(user as unknown as User);
   }
 
-  async login(loginDto: LoginDto): Promise<{
-    accessToken: string;
-    user: Omit<User, 'password'>;
-  }> {
+  async login(loginDto: LoginDto): Promise<AuthResponseDto> {
     const user = await this.usersService.findByEmail(loginDto.email);
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
@@ -37,16 +49,6 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    const payload: JwtUserPayload = {
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-    };
-
-    const accessToken = await this.jwtService.signAsync(payload);
-    return {
-      accessToken,
-      user: this.sanitizeUser(user),
-    };
+    return this.buildPayload(user);
   }
 }

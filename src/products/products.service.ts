@@ -119,7 +119,7 @@ export class ProductsService {
 			});
 		}
 
-		if (query.categoryId) {
+		if (query.categoryId !== undefined) {
 			qb.andWhere('category.id = :categoryId', {
 				categoryId: query.categoryId,
 			});

@@ -23,6 +23,8 @@ export interface OrderItemResponse {
 	sugarLevel: string | null;
 	iceLevel: string | null;
 	toppings: string[];
+	productName: string | null;
+	imageUrl: string | null;
 	price: number;
 }
 
@@ -68,6 +70,8 @@ export class OrdersService {
 				sugarLevel: item.sugarLevel ?? null,
 				iceLevel: item.iceLevel ?? null,
 				toppings: item.toppings ?? [],
+				productName: item.product?.name ?? null,
+				imageUrl: item.product?.image_url ?? null,
 				price: Number(item.price),
 			})),
 		};
