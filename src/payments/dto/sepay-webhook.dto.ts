@@ -1,53 +1,57 @@
 import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 /**
  * Payload SePay gửi về webhook khi phát hiện giao dịch chuyển khoản.
  * Docs: https://docs.sepay.vn
  */
 export class SepayWebhookDto {
-  /** ID giao dịch bên SePay */
+  @ApiProperty({ example: 123456789, description: 'Transaction ID from SePay' })
   @IsNumber()
   id: number;
 
-  /** Ngân hàng nhận, e.g. "MB", "VCB" */
+  @ApiProperty({ example: 'MB', description: 'Bank code (e.g., "MB", "VCB")' })
   @IsString()
   gateway: string;
 
-  /** Thời gian giao dịch, e.g. "2024-01-01 12:00:00" */
+  @ApiProperty({ example: '2024-01-01 12:00:00', description: 'Transaction datetime' })
   @IsString()
   transactionDate: string;
 
-  /** Số tài khoản thụ hưởng */
+  @ApiProperty({ example: '1234567890', description: 'Beneficiary account number' })
   @IsString()
   accountNumber: string;
 
-  /** Nội dung chuyển khoản — dùng để match payment_code */
+  @ApiPropertyOptional({
+    example: 'PAYMENT-123',
+    description: 'Transfer content — used to match payment_code',
+  })
   @IsString()
   @IsOptional()
   content?: string;
 
-  /**
-   * Mã đối chiếu — SePay parse từ nội dung
-   * Có thể null nếu SePay không nhận diện được
-   */
+  @ApiPropertyOptional({
+    example: 'PAYMENT-123',
+    description: 'Reference code parsed by SePay from transfer content',
+  })
   @IsString()
   @IsOptional()
   code?: string | null;
 
-  /** "in" = tiền vào, "out" = tiền ra */
+  @ApiProperty({ example: 'in', enum: ['in', 'out'], description: '"in" = money in, "out" = money out' })
   @IsString()
   transferType: string;
 
-  /** Số tiền giao dịch */
+  @ApiProperty({ example: 50000, description: 'Transaction amount' })
   @IsNumber()
   transferAmount: number;
 
-  /** Mã tham chiếu ngân hàng */
+  @ApiPropertyOptional({ example: 'ABC123XYZ', description: 'Bank reference code' })
   @IsString()
   @IsOptional()
   referenceCode?: string;
 
-  /** Số dư lũy kế */
+  @ApiPropertyOptional({ example: 100000, description: 'Cumulative balance' })
   @IsNumber()
   @IsOptional()
   accumulated?: number;

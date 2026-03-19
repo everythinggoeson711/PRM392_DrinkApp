@@ -1,4 +1,5 @@
 import { IsIn } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export const ORDER_STATUS_VALUES = [
   'PENDING',
@@ -10,6 +11,11 @@ export const ORDER_STATUS_VALUES = [
 export type OrderStatus = (typeof ORDER_STATUS_VALUES)[number];
 
 export class UpdateOrderStatusDto {
+  @ApiProperty({
+    example: 'PROCESSING',
+    enum: ['PENDING', 'PROCESSING', 'COMPLETED', 'CANCELLED'],
+    description: 'New order status',
+  })
   @IsIn(ORDER_STATUS_VALUES)
   status: OrderStatus;
 }

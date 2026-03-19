@@ -27,27 +27,27 @@ VALUES
 
 -- PRODUCTS
 INSERT INTO products (name, price, image_url, category_id)
-SELECT 'Brown Sugar Milk Tea', 45000, 'https://example.com/products/brown-sugar-milk-tea.png', c.id
+SELECT 'Brown Sugar Milk Tea', 45000, 'https://teakandthyme.com/wp-content/uploads/2022/11/brown-sugar-milk-tea-DSC_0482-1600.jpg', c.id
 FROM categories c WHERE c.name = 'Milk Tea';
 
 INSERT INTO products (name, price, image_url, category_id)
-SELECT 'Classic Milk Tea', 39000, 'https://example.com/products/classic-milk-tea.png', c.id
+SELECT 'Classic Milk Tea', 39000, 'https://assets.epicurious.com/photos/5953ca064919e41593325d97/1:1/w_3744,h_3744,c_limit/bubble_tea_recipe_062817.jpg', c.id
 FROM categories c WHERE c.name = 'Milk Tea';
 
 INSERT INTO products (name, price, image_url, category_id)
-SELECT 'Peach Oolong Tea', 42000, 'https://example.com/products/peach-oolong.png', c.id
+SELECT 'Peach Oolong Tea', 42000, 'https://www.sunnysyrup.com/proimages/recipe/04Fruit_Tea/01%20Peach%20Oolong%20Tea%20with%20Peach%20Cube.jpg', c.id
 FROM categories c WHERE c.name = 'Fruit Tea';
 
 INSERT INTO products (name, price, image_url, category_id)
-SELECT 'Passion Fruit Tea', 40000, 'https://example.com/products/passion-fruit-tea.png', c.id
+SELECT 'Passion Fruit Tea', 40000, 'https://www.stephsunshine.com/static/aca3ad24d331a17ce08b7f3a2ad4c3fc/501e6/Passion-Fruit-Iced-Tea-Hero-11.jpg', c.id
 FROM categories c WHERE c.name = 'Fruit Tea';
 
 INSERT INTO products (name, price, image_url, category_id)
-SELECT 'Latte', 47000, 'https://example.com/products/latte.png', c.id
+SELECT 'Latte', 47000, 'https://vinbarista.com/uploads/news/ca-phe-latte-la-gi-latte-co-vi-gi-latte-khac-gi-capuchino-202408161122.jpg', c.id
 FROM categories c WHERE c.name = 'Coffee';
 
 INSERT INTO products (name, price, image_url, category_id)
-SELECT 'Americano', 35000, 'https://example.com/products/americano.png', c.id
+SELECT 'Americano', 35000, 'https://www.cubes-asia.com/storage/blogs/2023/cafe-americano.jpg', c.id
 FROM categories c WHERE c.name = 'Coffee';
 
 -- ORDERS + ORDER ITEMS
@@ -91,3 +91,10 @@ FROM (
   GROUP BY order_id
 ) totals
 WHERE totals.order_id = o.id;
+
+-- PAYMENTS
+INSERT INTO payments (order_id, amount, payment_code, status)
+SELECT o.id, o.total_amount, 'PAYMENT-' || o.id, 'PAID'
+FROM orders o
+WHERE o.status IN ('PROCESSING', 'COMPLETED')
+ON CONFLICT (payment_code) DO NOTHING;

@@ -31,7 +31,7 @@ import { Payment } from './payments/entities/payment.entity';
         password: configService.get<string>('DB_PASSWORD', 'password'),
         database: configService.get<string>('DB_NAME', 'drink_order_app'),
         entities: [User, Category, Product, Order, OrderItem, Payment],
-        synchronize: false,
+        synchronize: true,
       }),
     }),
     UsersModule,
