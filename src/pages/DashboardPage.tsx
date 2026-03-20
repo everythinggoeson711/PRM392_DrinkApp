@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ordersApi } from '../api/orders';
 import { productsApi } from '../api/products';
 import { usersApi } from '../api/users';
